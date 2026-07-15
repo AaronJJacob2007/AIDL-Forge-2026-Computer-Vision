@@ -1,0 +1,75 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ===== Virtual Environments =====
+venv/
+env/
+ENV/
+.venv/
+.env
+
+# ===== Environment Variables / Secrets =====
+.env
+.env.local
+*.pem
+
+# ===== FastAPI / Uvicorn =====
+*.log
+
+# ===== Jupyter =====
+.ipynb_checkpoints/
+
+# ===== OS Files =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== IDE / Editor =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== Testing / Coverage =====
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# ===== Media / Captures (workshop artifacts) =====
+*.mp4
+*.avi
+captured_frames/
+
+# ===== MediaPipe model files (downloaded locally, see setup.md) =====
+
+
+# ===== Node (frontend tooling, if used) =====
+node_modules/
+package-lock.json
+
+# ===== Misc =====
+*.bak
+*.tmp

@@ -1,0 +1,370 @@
+/* =============================================================
+   AIDL Forge — Hand Tracking Dashboard
+   Visual identity: a live instrument-panel readout for a computer
+   vision detection feed. Corner brackets around the finger count
+   echo a camera bounding-box/detection frame.
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --color-bg: #0d1417;
+  --color-panel: #161f23;
+  --color-border: #233038;
+  --color-accent: #5eead4;
+  --color-accent-dim: #3a8f82;
+  --color-warning: #f5a623;
+  --color-text: #e7edee;
+  --color-text-dim: #8ea0a6;
+
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  background-image:
+    linear-gradient(var(--color-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center top;
+  background-attachment: fixed;
+}
+
+/* Faint grid backdrop reads as a technical instrument surface rather
+   than a flat corporate background, without competing with content. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at top, rgba(94, 234, 212, 0.06), transparent 60%);
+  pointer-events: none;
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 24px 32px;
+  position: relative;
+}
+
+/* -----------------------------------------------------------
+   Header
+   ----------------------------------------------------------- */
+
+.page-header {
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 24px;
+}
+
+.page-header h1 {
+  font-family: var(--font-mono);
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+  color: var(--color-text);
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  margin: 0;
+}
+
+/* -----------------------------------------------------------
+   Dashboard grid
+   ----------------------------------------------------------- */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 720px) {
+  .dashboard {
+    grid-template-columns: 1.1fr 1fr;
+    grid-template-areas:
+      'count status'
+      'controls controls';
+  }
+
+  .card-count { grid-area: count; }
+  .card-status { grid-area: status; }
+  .card-controls { grid-area: controls; }
+}
+
+.card {
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.card-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-dim);
+  margin: 0 0 20px;
+}
+
+/* -----------------------------------------------------------
+   Signature element: finger count framed like a detection box.
+   Four explicit corner elements anchor to the card itself, so the
+   frame stays crisp regardless of digit count or viewport width.
+   ----------------------------------------------------------- */
+
+.card-count {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: 40px 28px;
+  overflow: hidden;
+}
+
+.corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--color-accent);
+}
+
+.corner--tl {
+  top: 16px;
+  left: 16px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner--tr {
+  top: 16px;
+  right: 16px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner--bl {
+  bottom: 16px;
+  left: 16px;
+  border-right: none;
+  border-top: none;
+}
+
+.corner--br {
+  bottom: 16px;
+  right: 16px;
+  border-left: none;
+  border-top: none;
+}
+
+.finger-count {
+  position: relative;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(4rem, 14vw, 6rem);
+  font-weight: 600;
+  line-height: 1;
+  margin: 0;
+  color: var(--color-accent);
+  text-shadow: 0 0 24px rgba(94, 234, 212, 0.35);
+}
+
+/* -----------------------------------------------------------
+   Status card
+   ----------------------------------------------------------- */
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-dot--unknown {
+  background: var(--color-text-dim);
+}
+
+.status-dot--live {
+  background: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.18);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.status-dot--offline {
+  background: var(--color-warning);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-dot--live {
+    animation: none;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+.status-text {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.status-details {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.status-details-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid var(--color-border);
+  padding-top: 10px;
+}
+
+.status-details-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.status-details dt {
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+}
+
+.status-details dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+/* -----------------------------------------------------------
+   Controls card
+   ----------------------------------------------------------- */
+
+.controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.button {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.button--primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #06201c;
+}
+
+.button--primary:not(:disabled):hover {
+  background: var(--color-accent-dim);
+  border-color: var(--color-accent-dim);
+}
+
+.button--secondary {
+  background: transparent;
+  color: var(--color-text);
+}
+
+.button--secondary:not(:disabled):hover {
+  border-color: var(--color-text-dim);
+}
+
+.button--ghost {
+  background: transparent;
+  color: var(--color-text-dim);
+  border-color: transparent;
+}
+
+.button--ghost:not(:disabled):hover {
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.controls-hint {
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  margin: 0;
+}
+
+.controls-hint code {
+  font-family: var(--font-mono);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.8rem;
+  color: var(--color-accent);
+}
+
+/* -----------------------------------------------------------
+   Footer
+   ----------------------------------------------------------- */
+
+.page-footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.page-footer p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+}

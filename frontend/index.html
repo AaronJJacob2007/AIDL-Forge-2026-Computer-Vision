@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIDL Forge — Hand Tracking Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="page">
+
+    <header class="page-header">
+      <h1>AIDL Buildathon Forge 2026</h1>
+      <p class="subtitle">Live Hand Tracking Dashboard — Day 3: Computer Vision</p>
+    </header>
+
+    <main class="dashboard">
+
+      <section class="card card-count" aria-labelledby="finger-count-heading">
+        <span class="corner corner--tl" aria-hidden="true"></span>
+        <span class="corner corner--tr" aria-hidden="true"></span>
+        <span class="corner corner--bl" aria-hidden="true"></span>
+        <span class="corner corner--br" aria-hidden="true"></span>
+        <h2 id="finger-count-heading" class="card-label">Fingers Raised</h2>
+        <p id="finger-count" class="finger-count">--</p>
+      </section>
+
+      <section class="card card-status" aria-labelledby="status-heading">
+        <h2 id="status-heading" class="card-label">Status</h2>
+
+        <div class="status-row">
+          <span id="status-dot" class="status-dot status-dot--unknown" aria-hidden="true"></span>
+          <span id="status-text" class="status-text">Not connected</span>
+        </div>
+
+        <dl class="status-details">
+          <div class="status-details-row">
+            <dt>Hand detected</dt>
+            <dd id="hand-detected-value">--</dd>
+          </div>
+          <div class="status-details-row">
+            <dt>FPS</dt>
+            <dd id="fps-value">--</dd>
+          </div>
+          <div class="status-details-row">
+            <dt>Last updated</dt>
+            <dd id="updated-at-value">--</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="card card-controls" aria-labelledby="controls-heading">
+        <h2 id="controls-heading" class="card-label">Controls</h2>
+
+        <div class="controls-row">
+          <button id="start-button" class="button button--primary" type="button">Start Polling</button>
+          <button id="stop-button" class="button button--secondary" type="button" disabled>Stop Polling</button>
+          <button id="refresh-button" class="button button--ghost" type="button">Refresh Once</button>
+        </div>
+
+        <p class="controls-hint">
+          Polling requests <code>GET /count</code> from the backend every second.
+          Make sure <code>uvicorn main:app --reload</code> is running in <code>backend/</code>.
+        </p>
+      </section>
+
+    </main>
+
+    <footer class="page-footer">
+      <p>AIDL Buildathon Forge 2026 &middot; Computer Vision Workshop &middot; Backend demo (instructor-led)</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

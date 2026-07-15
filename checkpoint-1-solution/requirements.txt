@@ -1,0 +1,12 @@
+# Dependencies for checkpoint-1/hand_tracking.py
+#
+# Identical to the root-level requirements.txt — duplicated here so
+# this folder can be run standalone if a student `cd`s directly into
+# it without installing from the repository root.
+#
+# Targets: Python 3.12 + MediaPipe 0.10.35
+# Uses the MediaPipe Tasks API (mediapipe.tasks.python.vision) only.
+
+opencv-python==4.10.0.84
+mediapipe==0.10.35
+numpy==1.26.4
