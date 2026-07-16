@@ -62,27 +62,7 @@ MODEL_PATH = str(SCRIPT_DIR / "hand_landmarker.task")
 FINGER_TIPS = [4, 8, 12, 16, 20]        # Thumb, Index, Middle, Ring, Pinky tips
 FINGER_PIPS = [3, 6, 10, 14, 18]        # The joint just below each tip
 
-# Pairs of landmark indices to connect with lines, forming the visible
-# "skeleton" of the hand. Defined locally so this file has no
-# dependency on the deprecated mediapipe.solutions module.
-# You will use this list in Checkpoint 3 to draw the connecting lines
-# between landmarks.
-HAND_CONNECTIONS = [
-    (0, 1), (1, 2), (2, 3), (3, 4),          # Thumb
-    (0, 5), (5, 6), (6, 7), (7, 8),          # Index finger
-    (5, 9), (9, 10), (10, 11), (11, 12),     # Middle finger
-    (9, 13), (13, 14), (14, 15), (15, 16),   # Ring finger
-    (13, 17), (17, 18), (18, 19), (19, 20),  # Pinky finger
-    (0, 17),                                 # Palm base
-]
-
 WINDOW_NAME = "AIDL Forge — Hand Tracking (Starter)"
-
-# UI colors (BGR, since OpenCV uses Blue-Green-Red ordering).
-# You will use these in Checkpoint 3 when drawing landmarks and
-# connecting lines.
-COLOR_LANDMARK = (0, 255, 0)      # Green dots
-COLOR_CONNECTION = (255, 200, 0)  # Light blue skeleton lines
 
 
 # ---------------------------------------------------------------------------
@@ -128,15 +108,7 @@ def create_hand_landmarker() -> mp_vision.HandLandmarker:
     #       mp_vision.HandLandmarker.create_from_options(options)
     #
     # Replace the line below with your implementation.
-    base_options=mp_tasks.BaseOptions(model_asset_path=MODEL_PATH)
-    options=mp_vision.HandLandmarkerOptions(
-        base_options=base_options,
-        running_mode=mp_vision.RunningMode.VIDEO,
-        num_hands=1,
-        min_hand_detection_confidence=0.5,
-        min_tracking_confidence=0.5,)
-    return mp_vision.HandLandmarker.create_from_options(options)
-    
+    raise NotImplementedError("Checkpoint 1: create_hand_landmarker() is not implemented yet.")
 
 
 # ---------------------------------------------------------------------------
@@ -174,10 +146,7 @@ def detect_hands(
     #    and return the result.
     #
     # Replace the line below with your implementation.
-    rgb_frame=cv2.cvtColor(frame_bgr,cv2.COLOR_BGR2RGB)
-    mp_image=mp.Image(image_format=mp.ImageFormat.SRGB,data=rgb_frame)
-    return landmarker.detect_for_video(mp_image,timestamp_ms)
-
+    raise NotImplementedError("Checkpoint 2: detect_hands() is not implemented yet.")
 
 
 # ---------------------------------------------------------------------------
@@ -209,31 +178,16 @@ def draw_landmarks(frame_bgr, result: mp_vision.HandLandmarkerResult):
 
     for hand_landmarks in result.hand_landmarks:
         # TODO (Checkpoint 3):
-        # 1. Loop over `hand_landmarks` (21 landmark points) and convert
-        #    each landmark's normalized (x, y) to pixel coordinates:
-        #       px = int(landmark.x * frame_width)
-        #       py = int(landmark.y * frame_height)
-        #    Store the results as a list of (px, py) tuples — you'll
-        #    need it for both steps below.
-        #
-        # 2. Draw the connecting "skeleton" lines using the HAND_CONNECTIONS
-        #    pairs defined near the top of this file:
-        #       cv2.line(frame_bgr, points[start_idx], points[end_idx],
-        #                COLOR_CONNECTION, 2)
-        #    Draw these BEFORE the circles below, so the dots end up
-        #    sitting visually on top of the lines.
-        #
+        # 1. Loop over `hand_landmarks` (21 landmark points).
+        # 2. Convert each landmark's normalized (x, y) to pixel
+        #    coordinates: px = int(landmark.x * frame_width)
+        #                  py = int(landmark.y * frame_height)
         # 3. Draw a small filled circle at each point using
-        #    COLOR_LANDMARK:
-        #       cv2.circle(frame_bgr, point, 5, COLOR_LANDMARK, -1)
+        #    cv2.circle(frame_bgr, (px, py), 5, (0, 255, 0), -1)
         #
-        # Replace the line below with your implementation.
-        points=[(int(lm.x*frame_width),int(lm.y*frame_height))
-                for lm in hand_landmarks]
-        for start_idx,end_idx in HAND_CONNECTIONS:
-            cv2.line(frame_bgr,points[start_idx],points[end_idx],COLOR_CONNECTION,2)
-        for point in points:
-            cv2.circle(frame_bgr,point,5,COLOR_LANDMARK,-1)
+        # Bonus (optional): connect the dots using HAND_CONNECTIONS
+        # pairs to draw the hand "skeleton" instead of just points.
+        pass
 
     return frame_bgr
 
@@ -275,17 +229,7 @@ def count_fingers(hand_landmarks) -> int:
     # 4. Return the total count.
     #
     # Replace the line below with your implementation.
-    raised=0
-    for tip_idx,pip_idx in zip(FINGER_TIPS[1:],FINGER_PIPS[1:]):
-        if hand_landmarks[tip_idx].y<hand_landmarks[pip_idx].y:
-            raised+=1
-    thumb_tip=hand_landmarks[FINGER_TIPS[0]]
-    thumb_joint=hand_landmarks[FINGER_PIPS[0]]
-    wrist=hand_landmarks[0]
-
-    if abs(thumb_tip.x-wrist.x)>abs(thumb_joint.x-wrist.x):
-        raised+=1
-    return raised
+    raise NotImplementedError("Checkpoint 4: count_fingers() is not implemented yet.")
 
 
 # ---------------------------------------------------------------------------
